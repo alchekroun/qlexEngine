@@ -1,18 +1,18 @@
 #pragma once
 
+#include "Vector2.h"
+
 namespace qlexengine
 {
     namespace maths
     {
 
         template <typename T>
-        struct Vec3
+        struct Vec3 : public Vec2<T>
         {
-            T x;
-            T y;
             T z;
 
-            Vec3(T x_, T y_, T z_) : x(x_), y(y_), z(z_) {}
+            Vec3(T x_, T y_, T z_) : Vec2(x_, y_), z(z_) {}
 
             // VECTORS OPERATIONS
 

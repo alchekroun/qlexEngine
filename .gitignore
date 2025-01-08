@@ -31,3 +31,7 @@
 *.exe
 *.out
 *.app
+
+# Vscode
+.vscode/
+CMakePresets.json

@@ -2,48 +2,42 @@
 
 #include "logger/logger.h"
 #include "physics/Square.h"
+#include "physics/Circle.h"
 #include "engine/Application.h"
 #include "render/Renderer.h"
 
 #include <raylib.h>
 
-qlexengine::logger *_log = new qlexengine::logger("MAIN");
+std::unique_ptr<qlexengine::logger> _log = std::make_unique<qlexengine::logger>("MAIN");
 
 int main()
 {
-    /*     qlexengine::maths::Vec3<int>* v1 = new qlexengine::maths::Vec3<int>(0, 0, 0);
-        _log->msg("x = ", v1->x);
-        *v1 += 1;
-        _log->msg("x = ", v1->x);
+    qlexengine::Application *a = new qlexengine::Application();
+    std::shared_ptr<qlexengine::Square> s1 = std::make_shared<qlexengine::Square>(qlexengine::maths::Vec2<float>(400, 400), 50, 1.0);
+    std::shared_ptr<qlexengine::Square> s2 = std::make_shared<qlexengine::Square>(qlexengine::maths::Vec2<float>(0, 400), 50, qlexengine::maths::Vec2<float>(5, 0), 1.0);
+    std::shared_ptr<qlexengine::Circle> c1 = std::make_shared<qlexengine::Circle>(qlexengine::maths::Vec2<float>(0, 600), 50, qlexengine::maths::Vec2<float>(5, 0), 1.0);
+    std::shared_ptr<qlexengine::Triangle> t1 = std::make_shared<qlexengine::Triangle>(qlexengine::maths::Vec2<float>(100, 100), qlexengine::maths::Vec2<float>(100, 200), qlexengine::maths::Vec2<float>(200, 200), qlexengine::maths::Vec2<float>(2, 15), 0.01);
 
-        qlexengine::Shape* s1 = new qlexengine::Shape(1.0);
-        _log->msg("s1 position = ", s1->position);
-
-        qlexengine::Application* a = new qlexengine::Application(); */
-
-    qlexengine::Application* a = new qlexengine::Application();
-    std::shared_ptr<qlexengine::Square> s1 = std::make_shared<qlexengine::Square>(50, qlexengine::maths::Vec3<float>(400, 400, 100), 1.0);
-    std::shared_ptr<qlexengine::Square> s2 = std::make_shared<qlexengine::Square>(50, qlexengine::maths::Vec3<float>(0, 400, 100), qlexengine::maths::Vec3<float>(50, 0, 0), 1.0);
-
-    a->addShape(s1);
-    a->addShape(s2);
-
-    a->start(0.016f);
+    a->addShape2D(s1);
+    a->addShape2D(s2);
+    a->addShape2D(c1);
+    a->addShape2D(t1);
 
     InitWindow(800, 600, "Hello Raylib");
-    SetTargetFPS(30);
+    SetTargetFPS(24);
+    auto shapes = a->getShapes();
+    std::for_each(shapes.begin(), shapes.end(), [&](const auto& s) {_log->msg(s);});
 
     while (!WindowShouldClose())
     {
-        float deltaTime = GetFrameTime() / 4;
+        float deltaTime = GetFrameTime();
 
-
-        a->start(deltaTime);
+        a->step(deltaTime);
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
         DrawText("SEPT heures cumulés pour afficher ça!", 200, 200, 20, BLACK);
-        qlexengine::Renderer::drawShapes<qlexengine::Shape>(a->getShapes());
+        qlexengine::Renderer::drawShapes<qlexengine::Shape2D>(a->getShapes());
         EndDrawing();
     }
 

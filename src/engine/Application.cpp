@@ -16,7 +16,7 @@ namespace qlexengine
         return true;
     }
 
-    bool Application::removeShape(const std::shared_ptr<Shape> shape_)
+    bool Application::removeShape2D(const std::shared_ptr<Shape2D> shape_)
     {
         auto shape_found = std::find(_shapes.begin(), _shapes.end(), shape_);
         if (shape_found != _shapes.end())
@@ -29,15 +29,9 @@ namespace qlexengine
 
     void Application::step(float dt)
     {
-        for (std::shared_ptr<Shape> shape : _shapes)
+        for (std::shared_ptr<Shape2D> shape : _shapes)
         {
-            _log->msg("Before : ", shape->position);
-            shape->force = _gravity * shape->mass;
-
-            shape->velocity += shape->force / shape->mass * dt;
-            shape->position += shape->velocity * dt;
-            shape->force = maths::Vec3<float>(0, 0, 0); // reset net force at the end;
-            _log->msg("After +", dt, " : ", shape->position);
+            shape->update(dt);
         }
     }
 
