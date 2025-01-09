@@ -5,34 +5,17 @@ namespace qlexengine
 
     bool Application::initialize()
     {
+        _physicEngine->initialize();
+        _renderer->initialize();
+        _state = RUNNING;
         return true;
     }
 
-    bool Application::start(float dt)
+    bool Application::start(const float& dt)
     {
-        for (int i = 0; i < 10; i++) {
-            step(dt);
-        }
+        _physicEngine->start();
+        _renderer->start();
         return true;
-    }
-
-    bool Application::removeShape2D(const std::shared_ptr<Shape2D> shape_)
-    {
-        auto shape_found = std::find(_shapes.begin(), _shapes.end(), shape_);
-        if (shape_found != _shapes.end())
-        {
-            _shapes.erase(shape_found);
-            return true;
-        }
-        return false;
-    }
-
-    void Application::step(float dt)
-    {
-        for (std::shared_ptr<Shape2D> shape : _shapes)
-        {
-            shape->update(dt);
-        }
     }
 
 } // qlexengine

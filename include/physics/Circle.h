@@ -14,10 +14,10 @@ namespace qlexengine
         maths::Vec2<float> center;
         float radius;
 
-        Circle(const maths::Vec2<float> &center_, const float &radius_) : center(center_), radius(radius_), Shape2D() {};
-        Circle(const maths::Vec2<float> &center_, const float &radius_, const float &mass_) : center(center_), radius(radius_), Shape2D(mass_) {};
-        Circle(const maths::Vec2<float> &center_, const float &radius_, const maths::Vec2<float> &velocity_, const float &mass_) : center(center_), radius(radius_), Shape2D(velocity_, mass_) {};
-        Circle(const maths::Vec2<float> &center_, const float &radius_, const maths::Vec2<float> &velocity_, const maths::Vec2<float> &force_, const float &mass_) : center(center_), radius(radius_), Shape2D(velocity_, force_, mass_) {};
+        Circle(const maths::Vec2<float> &center_, const float &radius_, Color color_) : center(center_), radius(radius_), Shape2D(color_) {};
+        Circle(const maths::Vec2<float> &center_, const float &radius_, const float &mass_, Color color_) : center(center_), radius(radius_), Shape2D(mass_, color_) {};
+        Circle(const maths::Vec2<float> &center_, const float &radius_, const maths::Vec2<float> &velocity_, const float &mass_, Color color_) : center(center_), radius(radius_), Shape2D(velocity_, mass_, color_) {};
+        Circle(const maths::Vec2<float> &center_, const float &radius_, const maths::Vec2<float> &velocity_, const maths::Vec2<float> &force_, const float &mass_, Color color_) : center(center_), radius(radius_), Shape2D(velocity_, force_, mass_, color_) {};
 
         void update(const float &dt)
         {
@@ -27,10 +27,16 @@ namespace qlexengine
             force = maths::Vec2<float>(0, 0); // reset net force at the end;
         }
 
+        void draw()
+        {
+            DrawCircle(GetScreenHeight() - center.x, GetScreenWidth() - center.y, radius, color);
+        }
+
+    private:
         std::unique_ptr<logger> _log = std::make_unique<logger>("Circle");
     };
 
-    std::ostream &operator<<(std::ostream &outs, const Circle &c)
+    inline std::ostream &operator<<(std::ostream &outs, const Circle &c)
     {
         return outs << c.center << " r=" << c.radius;
     }

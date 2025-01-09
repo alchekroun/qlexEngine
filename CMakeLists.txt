@@ -26,6 +26,4 @@ add_subdirectory(src)
 add_executable(qlexEngine "src/main.cpp")
 
 target_include_directories(qlexEngine PUBLIC ${PROJECT_BINARY_DIR})
-target_link_libraries(qlexEngine raylib)
-target_link_libraries(qlexEngine Application)
-
+target_link_libraries(qlexEngine PRIVATE raylib Application Engine Renderer)

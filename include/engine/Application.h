@@ -4,32 +4,31 @@
 #include <vector>
 #include <memory>
 
-#include "physics/Shape2D.h"
 #include "logger/logger.h"
+#include "Engine.h"
+#include "render/Renderer.h"
 
 namespace qlexengine
 {
+
+  enum Application_STATE {
+    DOWN,
+    RUNNING,
+  };
 
   class Application
   {
   public:
     bool initialize();
 
-    bool start(float dt);
+    bool start(const float& dt);
 
-    void addShape2D(const std::shared_ptr<Shape2D> shape_) { _shapes.push_back(shape_); }
-    bool removeShape2D(const std::shared_ptr<Shape2D> shape_);
-    std::vector<std::shared_ptr<Shape2D>> getShapes() const { return _shapes; }
-
-    void step(float dt);
-
-    maths::Vec2<float> _gravity2D{0, -9.81f};
+    std::unique_ptr<Engine> _physicEngine = std::make_unique<Engine>();
+    std::unique_ptr<Renderer> _renderer = std::make_unique<Renderer>();
 
   private:
     std::thread _mainThread;
-
-    std::vector<std::shared_ptr<Shape2D>> _shapes;
-
+    Application_STATE _state;
     std::unique_ptr<logger> _log = std::make_unique<logger>("Application");
   };
 
