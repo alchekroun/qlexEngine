@@ -9,5 +9,6 @@ Librairies :
 - ImGui
 
 ## Roadmap
-- Collision :hourglass:
-- idk yet :hammer:
+- Collisions :hourglass:
+- ImGui integration :hourglass:
+- Camera :hourglass:
