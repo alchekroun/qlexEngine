@@ -26,7 +26,7 @@ namespace qlexengine
             force = maths::Vec2<float>(0, 0); // reset net force at the end;
         };
 
-        void draw()
+        void draw() const
         {
             DrawTriangle(
                 {GetScreenHeight() - a.x, GetScreenWidth() - a.y},
@@ -35,8 +35,28 @@ namespace qlexengine
                 color);
         }
 
+        maths::Vec2<float> getPosition() const
+        {
+            return getIncenter();
+        }
+
+        maths::Vec2<float> getIncenter() const
+        {
+            float op_a = maths::distance(b, c);
+            float op_b = maths::distance(a, c);
+            float op_c = maths::distance(a, b);
+
+            float perimeter = op_a + op_b + op_c;
+
+            maths::Vec2<float> incenter(0, 0);
+            incenter.x = (op_a * a.x + op_b * b.x + op_c * c.x) / perimeter;
+            incenter.x = (op_a * a.y + op_b * b.y + op_c * c.y) / perimeter;
+
+            return incenter;
+        }
+
     private:
-                std::unique_ptr<logger> _log = std::make_unique<logger>("Triangle");
+        std::unique_ptr<logger> _log = std::make_unique<logger>("Triangle");
     };
 
     inline std::ostream &operator<<(std::ostream &outs, const Triangle &t)

@@ -21,15 +21,20 @@ namespace qlexengine
 
         void update(const float &dt)
         {
-            force = maths::Vec2<float>(0, -9.81f) * mass;
+            force = maths::Vec2<float>(0, -0.81f) * mass;
             velocity += force / mass * dt;
             center += velocity + dt;
             force = maths::Vec2<float>(0, 0); // reset net force at the end;
         }
 
-        void draw()
+        void draw() const
         {
             DrawCircle(GetScreenHeight() - center.x, GetScreenWidth() - center.y, radius, color);
+        }
+
+        maths::Vec2<float> getPosition() const
+        {
+            return center;
         }
 
     private:

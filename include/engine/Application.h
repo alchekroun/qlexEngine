@@ -7,6 +7,10 @@
 #include "logger/logger.h"
 #include "Engine.h"
 #include "render/Renderer.h"
+#include "System/GUI.h"
+
+#include "imgui.h"
+#include "rlImGui.h"
 
 namespace qlexengine
 {
@@ -26,6 +30,7 @@ namespace qlexengine
 
     std::unique_ptr<Engine> _physicEngine = std::make_unique<Engine>();
     std::unique_ptr<Renderer> _renderer = std::make_unique<Renderer>();
+    std::unique_ptr<GUI> _gui = std::make_unique<GUI>();
 
   private:
     std::thread _mainThread;

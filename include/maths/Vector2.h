@@ -110,6 +110,11 @@ namespace qlexengine
                 return Vec2<T>(x * k, y * k);
             }
 
+            friend Vec2 operator*(const T &k, const Vec2<float> &v)
+            {
+                return v * k;
+            }
+
             Vec2 &operator/=(const T &k)
             {
                 this->x /= k;
@@ -124,8 +129,13 @@ namespace qlexengine
             }
         };
 
+        inline float distance(const Vec2<float> &v1, const Vec2<float> &v2)
+        {
+            return std::sqrt(std::pow((v1.x - v2.x), 2) + std::pow((v1.y - v2.y), 2));
+        }
+
         template <typename T>
-        std::ostream &operator<<(std::ostream &outs, const Vec2<T> &v)
+        inline std::ostream &operator<<(std::ostream &outs, const Vec2<T> &v)
         {
             return outs << '(' << v.x << ", " << v.y << ')';
         }

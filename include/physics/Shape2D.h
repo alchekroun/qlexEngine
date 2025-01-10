@@ -26,7 +26,8 @@ namespace qlexengine
         virtual ~Shape2D() = default;
 
         virtual void update(const float &dt) = 0;
-        virtual void draw() = 0;
+        virtual void draw() const = 0;
+        virtual maths::Vec2<float> getPosition() const = 0;
     };
 
 } // qlexengine
