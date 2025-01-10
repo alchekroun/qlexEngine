@@ -35,3 +35,6 @@
 # Vscode
 .vscode/
 CMakePresets.json
+
+# ImGui
+*.ini

@@ -33,6 +33,8 @@ namespace qlexengine
     std::unique_ptr<GUI> _gui = std::make_unique<GUI>();
 
   private:
+    void createShapes();
+
     std::thread _mainThread;
     Application_STATE _state;
     inline static int _FPS = 60;

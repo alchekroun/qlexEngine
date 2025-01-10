@@ -5,9 +5,9 @@
 
 #include <raylib.h>
 
-#include "physics/Square.h"
-#include "physics/Circle.h"
-#include "physics/Triangle.h"
+#include "physics/Dynamics/Square.h"
+#include "physics/Dynamics/Circle.h"
+#include "physics/Dynamics/Triangle.h"
 
 namespace qlexengine
 {

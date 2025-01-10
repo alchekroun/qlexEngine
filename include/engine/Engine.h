@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "logger/logger.h"
-#include "physics/Shape2D.h"
+#include "physics/Dynamics/Shape2D.h"
 
 namespace qlexengine
 {

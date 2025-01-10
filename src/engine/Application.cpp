@@ -19,6 +19,31 @@ namespace qlexengine
         return true;
     }
 
+    void Application::createShapes()
+    {
+        if (IsKeyPressed(KEY_A))
+        {
+            auto center = maths::Vec2<float>(GetMouseX(), GetMouseY());
+            auto velocity = maths::Vec2<float>(0, 0); // GetRandomValue(-10, 10), GetRandomValue(-10, 10));
+            auto tmpSquare = std::make_shared<Square>(center, GetRandomValue(50, 70), velocity, 1, PURPLE);
+            _physicEngine->addShape2D(tmpSquare);
+        }
+        else if (IsKeyPressed(KEY_B))
+        {
+            auto center = maths::Vec2<float>(GetMouseX(), GetMouseY());
+            auto velocity = maths::Vec2<float>(0, 0); // GetRandomValue(-10, 10), GetRandomValue(-10, 10));
+            auto tmp_square = std::make_shared<Circle>(center, GetRandomValue(10, 200), velocity, 1, ORANGE);
+            _physicEngine->addShape2D(tmp_square);
+        }
+        else if (IsKeyPressed(KEY_C))
+        {
+            auto center = maths::Vec2<float>(GetMouseX(), GetMouseY());
+            auto velocity = maths::Vec2<float>(0, 0); // GetRandomValue(-10, 10), GetRandomValue(-10, 10));
+            auto tmp_square = std::make_shared<Circle>(center, GetRandomValue(10, 200), velocity, 1, RED);
+            _physicEngine->addShape2D(tmp_square);
+        }
+    }
+
     bool Application::start(const float &dt)
     {
         InitWindow(_WINDOW_HEIGHT, _WINDOW_WIDTH, _WINDOW_HEADER_TEXT.c_str());
@@ -28,31 +53,47 @@ namespace qlexengine
         _renderer->start();
         _gui->start();
 
+        std::shared_ptr<Shape2D> pSelectedShape;
+        Color oldColor;
+
         while (!WindowShouldClose())
         {
             float deltaTime = GetFrameTime();
 
             // User IO
-            if (IsKeyPressed(KEY_A))
+            createShapes();
+
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
-                auto center = qlexengine::maths::Vec2<float>(GetScreenHeight() - GetMouseX(), GetScreenWidth() - GetMouseY());
-                auto velocity = qlexengine::maths::Vec2<float>(GetRandomValue(-10, 10), GetRandomValue(-10, 10));
-                auto tmp_square = std::make_shared<qlexengine::Square>(center, GetRandomValue(10, 200), velocity, GetRandomValue(1, 2), PURPLE);
-                _physicEngine->addShape2D(tmp_square);
+                pSelectedShape = nullptr;
+                for (const auto &s : _physicEngine->getShapes())
+                {
+                    if (s->isPointInShape(maths::Vec2<float>(GetMouseX(), GetMouseY())))
+                    {
+                        pSelectedShape = s;
+                        oldColor = s->color;
+                        break;
+                    }
+                }
             }
-            else if (IsKeyPressed(KEY_B))
+
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
             {
-                auto center = qlexengine::maths::Vec2<float>(GetScreenHeight() - GetMouseX(), GetScreenWidth() - GetMouseY());
-                auto velocity = qlexengine::maths::Vec2<float>(GetRandomValue(-10, 10), GetRandomValue(-10, 10));
-                auto tmp_square = std::make_shared<qlexengine::Circle>(center, GetRandomValue(10, 200), velocity, GetRandomValue(1, 2), ORANGE);
-                _physicEngine->addShape2D(tmp_square);
+                if (pSelectedShape != nullptr)
+                {
+                    pSelectedShape->color = BLACK;
+                    pSelectedShape->center.x = GetMouseX();
+                    pSelectedShape->center.y = GetMouseY();
+                    pSelectedShape->velocity.x = 0;
+                    pSelectedShape->velocity.y = 0;
+                }
             }
-            else if (IsKeyPressed(KEY_C))
+
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
             {
-                auto center = qlexengine::maths::Vec2<float>(GetScreenHeight() - GetMouseX(), GetScreenWidth() - GetMouseY());
-                auto velocity = qlexengine::maths::Vec2<float>(GetRandomValue(-10, 10), GetRandomValue(-10, 10));
-                auto tmp_square = std::make_shared<qlexengine::Circle>(center, GetRandomValue(10, 200), velocity, GetRandomValue(1, 2), ORANGE);
-                _physicEngine->addShape2D(tmp_square);
+                if (pSelectedShape != nullptr)
+                    pSelectedShape->color = oldColor;
+                pSelectedShape = nullptr;
             }
 
             // Update
@@ -63,6 +104,9 @@ namespace qlexengine
             ClearBackground(RAYWHITE);
             _renderer->render(_physicEngine->getShapes());
             _gui->render(_physicEngine->getShapes());
+
+            DrawText(TextFormat("Mouse (%i,%i)", GetMouseX(), GetMouseY()), GetScreenWidth() - 115, 30, 15, DARKBLUE);
+            DrawFPS(GetScreenWidth() - 95, 10);
             EndDrawing();
         }
         return true;

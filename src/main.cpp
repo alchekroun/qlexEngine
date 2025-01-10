@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "logger/logger.h"
-#include "physics/Square.h"
-#include "physics/Circle.h"
+#include "physics/Dynamics/Square.h"
+#include "physics/Dynamics/Circle.h"
 #include "engine/Application.h"
 #include "render/Renderer.h"
 
