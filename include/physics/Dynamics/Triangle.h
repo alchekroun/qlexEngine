@@ -13,21 +13,30 @@ namespace qlexengine
         maths::Vec2<float> b;
         maths::Vec2<float> c;
 
-        Triangle(const maths::Vec2<float> &center_, const float &radius_, Color color_) : a(maths::Vec2<float>(center.x, center.y + 2 * radius_)), // arbitrary choice to place the first point at the top.
-                                                                                          b(maths::Vec2<float>(center.x + 2 * radius_ * std::cos(maths::degreesToRadian(120)), center.y + 2 * radius_ * std::sin(maths::degreesToRadian(120)))),
-                                                                                          c(maths::Vec2<float>(center.x + 2 * radius_ * std::cos(maths::degreesToRadian(240)), center.y + 2 * radius_ * std::sin(maths::degreesToRadian(240)))),
-                                                                                          Shape2D(center_, color_) {};
-        Triangle(const maths::Vec2<float> &center_, const float &radius_, const float &mass_, Color color_) : a(maths::Vec2<float>(center.x, center.y + 2 * radius_)), // arbitrary choice to place the first point at the top.
-                                                                                                              b(maths::Vec2<float>(center.x + 2 * radius_ * std::cos(maths::degreesToRadian(120)), center.y + 2 * radius_ * std::sin(maths::degreesToRadian(120)))),
-                                                                                                              c(maths::Vec2<float>(center.x + 2 * radius_ * std::cos(maths::degreesToRadian(240)), center.y + 2 * radius_ * std::sin(maths::degreesToRadian(240)))),
-                                                                                                              Shape2D(center_, mass_, color_) {};
-        Triangle(const maths::Vec2<float> &center_, const float &radius_, const maths::Vec2<float> &velocity_, const float &mass_, Color color_) : a(maths::Vec2<float>(center.x, center.y + 2 * radius_)), // arbitrary choice to place the first point at the top.
-                                                                                                                                                   b(maths::Vec2<float>(center.x + 2 * radius_ * std::cos(maths::degreesToRadian(120)), center.y + 2 * radius_ * std::sin(maths::degreesToRadian(120)))),
-                                                                                                                                                   c(maths::Vec2<float>(center.x + 2 * radius_ * std::cos(maths::degreesToRadian(240)), center.y + 2 * radius_ * std::sin(maths::degreesToRadian(240)))),
-                                                                                                                                                   Shape2D(center_, velocity_, mass_, color_) {};
-        Triangle(const maths::Vec2<float> &center_, const float &radius_, const maths::Vec2<float> &velocity_, const maths::Vec2<float> &force_, const float &mass_, Color color_) : a(maths::Vec2<float>(center.x, center.y + 2 * radius_)), // arbitrary choice to place the first point at the top.
-                                                                                                                                                                                     b(maths::Vec2<float>(center.x + 2 * radius_ * std::cos(maths::degreesToRadian(120)), center.y + 2 * radius_ * std::sin(maths::degreesToRadian(120)))),
-                                                                                                                                                                                     c(maths::Vec2<float>(center.x + 2 * radius_ * std::cos(maths::degreesToRadian(240)), center.y + 2 * radius_ * std::sin(maths::degreesToRadian(240)))),
+        Triangle(const maths::Vec2<float> &center_, const float &radius_, Color color_) : a(maths::Vec2<float>(center_.x, center_.y + radius_)), // arbitrary choice to place the first point at the top.
+                                                                                          b(maths::Vec2<float>(center_.x + radius_ * std::cos(maths::degreesToRadian(120)), center_.y + radius_ * std::sin(maths::degreesToRadian(120)))),
+                                                                                          c(maths::Vec2<float>(center_.x + radius_ * std::cos(maths::degreesToRadian(240)), center_.y + radius_ * std::sin(maths::degreesToRadian(240)))),
+                                                                                          Shape2D(center_, color_)
+        {
+            _log->msg(center - getIncenter());
+        };
+        Triangle(const maths::Vec2<float> &center_, const float &radius_, const float &mass_, Color color_) : a(maths::Vec2<float>(center_.x, center_.y + radius_)), // arbitrary choice to place the first point at the top.
+                                                                                                              b(maths::Vec2<float>(center_.x + radius_ * std::cos(maths::degreesToRadian(120)), center_.y + radius_ * std::sin(maths::degreesToRadian(120)))),
+                                                                                                              c(maths::Vec2<float>(center_.x + radius_ * std::cos(maths::degreesToRadian(240)), center_.y + radius_ * std::sin(maths::degreesToRadian(240)))),
+                                                                                                              Shape2D(center_, mass_, color_)
+        {
+            _log->msg(center - getIncenter());
+        };
+        Triangle(const maths::Vec2<float> &center_, const float &radius_, const maths::Vec2<float> &velocity_, const float &mass_, Color color_) : a(maths::Vec2<float>(center_.x, center_.y - radius_)), // arbitrary choice to place the first point at the top.
+                                                                                                                                                   b(maths::Vec2<float>(center_.x + radius_ * std::cos(maths::degreesToRadian(120)), center_.y + radius_ * std::sin(maths::degreesToRadian(120)))),
+                                                                                                                                                   c(maths::Vec2<float>(center_.x - radius_ * std::cos(maths::degreesToRadian(240)), center_.y - radius_ * std::sin(maths::degreesToRadian(240)))),
+                                                                                                                                                   Shape2D(center_, velocity_, mass_, color_)
+        {
+            _log->msg(center - getIncenter());
+        };
+        Triangle(const maths::Vec2<float> &center_, const float &radius_, const maths::Vec2<float> &velocity_, const maths::Vec2<float> &force_, const float &mass_, Color color_) : a(maths::Vec2<float>(center_.x, center_.y + radius_)), // arbitrary choice to place the first point at the top.
+                                                                                                                                                                                     b(maths::Vec2<float>(center_.x + radius_ * std::cos(maths::degreesToRadian(120)), center_.y + radius_ * std::sin(maths::degreesToRadian(120)))),
+                                                                                                                                                                                     c(maths::Vec2<float>(center_.x + radius_ * std::cos(maths::degreesToRadian(240)), center_.y + radius_ * std::sin(maths::degreesToRadian(240)))),
                                                                                                                                                                                      Shape2D(center_, velocity_, force_, mass_, color_) {};
         Triangle(const maths::Vec2<float> &a_, const maths::Vec2<float> &b_, const maths::Vec2<float> &c_, Color color_) : a(a_), b(b_), c(c_), Shape2D(getIncenter(), color_) {}
         Triangle(const maths::Vec2<float> &a_, const maths::Vec2<float> &b_, const maths::Vec2<float> &c_, const float &mass_, Color color_) : a(a_), b(b_), c(c_), Shape2D(getIncenter(), mass_, color_) {}
@@ -41,6 +50,7 @@ namespace qlexengine
             a += velocity + dt;
             b += velocity + dt;
             c += velocity + dt;
+            center = getIncenter();
             force = maths::Vec2<float>(0, 0); // reset net force at the end;
         };
 
@@ -50,20 +60,21 @@ namespace qlexengine
                 {a.x, a.y},
                 {b.x, b.y},
                 {c.x, c.y},
-                color);
+                RED);
+            DrawCircle(center.x, center.y, 2, BLACK);
         }
 
         // Create an equilateral triangle given its incenter circle's center & radius
         void generatePointsFromIncenter(maths::Vec2<float> center, const float &radius)
         {
             // arbitrary choice to place the first point at the top.
-            this->a = maths::Vec2<float>(center.x, center.y + 2 * radius);
+            this->a = maths::Vec2<float>(center.x, center.y + radius);
             this->b = maths::Vec2<float>(
-                center.x + 2 * radius * std::cos(120),
-                center.y + 2 * radius * std::sin(120));
+                center.x + radius * std::cos(120),
+                center.y + radius * std::sin(120));
             this->c = maths::Vec2<float>(
-                center.x + 2 * radius * std::cos(240),
-                center.y + 2 * radius * std::sin(240));
+                center.x + radius * std::cos(240),
+                center.y + radius * std::sin(240));
         }
 
         maths::Vec2<float> getPosition() const
@@ -79,11 +90,9 @@ namespace qlexengine
 
             float perimeter = op_a + op_b + op_c;
 
-            maths::Vec2<float> incenter(0, 0);
-            incenter.x = (op_a * a.x + op_b * b.x + op_c * c.x) / perimeter;
-            incenter.x = (op_a * a.y + op_b * b.y + op_c * c.y) / perimeter;
-
-            return incenter;
+            return maths::Vec2<float>(
+                (a.x + b.x + c.x) / 3.0f,
+                (a.y + b.y + c.y) / 3.0f);
         }
 
         bool isPointInShape(const maths::Vec2<float> &point) const

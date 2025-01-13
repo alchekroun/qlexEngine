@@ -15,6 +15,11 @@ namespace qlexengine
 
             Vec2(T x_, T y_) : x(x_), y(y_) {}
 
+            float getMagnitude() const
+            {
+                return std::sqrt(std::pow(x, 2) + std::pow(y, 2));
+            }
+
             // VECTORS OPERATIONS
 
             Vec2 &operator+=(const Vec2<T> &other)
@@ -38,7 +43,7 @@ namespace qlexengine
                 return *this;
             }
 
-            Vec2 operator-(const Vec2<T> &other)
+            Vec2 operator-(const Vec2<T> &other) const
             {
                 return Vec2<T>(x - other.x, y - other.y);
             }
@@ -51,7 +56,7 @@ namespace qlexengine
                 return *this;
             }
 
-            Vec2 operator*(const Vec2<T> &other)
+            Vec2 operator*(const Vec2<T> &other) const
             {
                 return Vec2<T>(x * other.x, y * other.y);
             }
@@ -64,7 +69,7 @@ namespace qlexengine
                 return *this;
             }
 
-            Vec2 operator/(const Vec2<T> &other)
+            Vec2 operator/(const Vec2<T> &other) const
             {
                 return Vec2<T>(x / other.x, y / other.y);
             }
@@ -79,7 +84,7 @@ namespace qlexengine
                 return *this;
             }
 
-            Vec2 operator+(const T &k)
+            Vec2 operator+(const T &k) const
             {
                 return Vec2<T>(x + k, y + k);
             }
@@ -92,7 +97,7 @@ namespace qlexengine
                 return *this;
             }
 
-            Vec2 operator-(const T &k)
+            Vec2 operator-(const T &k) const
             {
                 return Vec2<T>(x - k, y - k);
             }
@@ -105,7 +110,7 @@ namespace qlexengine
                 return *this;
             }
 
-            Vec2 operator*(const T &k)
+            Vec2 operator*(const T &k) const
             {
                 return Vec2<T>(x * k, y * k);
             }
@@ -123,11 +128,16 @@ namespace qlexengine
                 return *this;
             }
 
-            Vec2 operator/(const T &k)
+            Vec2 operator/(const T &k) const
             {
                 return Vec2<T>(x / k, y / k);
             }
         };
+
+        inline float dotProduct(const Vec2<float> v1, const Vec2<float> v2)
+        {
+            return v1.x * v2.x + v1.y * v1.y;
+        }
 
         inline float distance(const Vec2<float> &v1, const Vec2<float> &v2)
         {

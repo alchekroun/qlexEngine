@@ -1,6 +1,9 @@
 #include <chrono>
 
 #include "engine/Application.h"
+#include "physics/dynamics/Circle.h"
+#include "physics/dynamics/Rectangle.h"
+#include "physics/dynamics/Triangle.h"
 
 namespace qlexengine
 {
@@ -21,26 +24,26 @@ namespace qlexengine
 
     void Application::createShapes()
     {
+
+        auto center = maths::Vec2<float>(GetMouseX(), GetMouseY());
+        auto velocity = maths::Vec2<float>(0, 0); // GetRandomValue(-10, 10), GetRandomValue(-10, 10));
         if (IsKeyPressed(KEY_A))
         {
-            auto center = maths::Vec2<float>(GetMouseX(), GetMouseY());
-            auto velocity = maths::Vec2<float>(0, 0); // GetRandomValue(-10, 10), GetRandomValue(-10, 10));
-            auto tmpSquare = std::make_shared<Square>(center, GetRandomValue(50, 70), velocity, 1, PURPLE);
+            auto tmpSquare = std::make_shared<Rectangle>(center, GetRandomValue(50, 70), GetRandomValue(50, 70), velocity, 1, PURPLE);
+            tmpSquare->id = _physicEngine->getShapes().size();
             _physicEngine->addShape2D(tmpSquare);
         }
         else if (IsKeyPressed(KEY_B))
         {
-            auto center = maths::Vec2<float>(GetMouseX(), GetMouseY());
-            auto velocity = maths::Vec2<float>(0, 0); // GetRandomValue(-10, 10), GetRandomValue(-10, 10));
-            auto tmp_square = std::make_shared<Circle>(center, GetRandomValue(10, 200), velocity, 1, ORANGE);
-            _physicEngine->addShape2D(tmp_square);
+            auto tmpCircle = std::make_shared<Circle>(center, GetRandomValue(10, 200), velocity, 1, ORANGE);
+            tmpCircle->id = _physicEngine->getShapes().size();
+            _physicEngine->addShape2D(tmpCircle);
         }
         else if (IsKeyPressed(KEY_C))
         {
-            auto center = maths::Vec2<float>(GetMouseX(), GetMouseY());
-            auto velocity = maths::Vec2<float>(0, 0); // GetRandomValue(-10, 10), GetRandomValue(-10, 10));
-            auto tmp_square = std::make_shared<Circle>(center, GetRandomValue(10, 200), velocity, 1, RED);
-            _physicEngine->addShape2D(tmp_square);
+            auto tmpTriangle = std::make_shared<Triangle>(center, GetRandomValue(50, 100), velocity, 1, RED);
+            tmpTriangle->id = _physicEngine->getShapes().size();
+            _physicEngine->addShape2D(tmpTriangle);
         }
     }
 
@@ -103,6 +106,7 @@ namespace qlexengine
             BeginDrawing();
             ClearBackground(RAYWHITE);
             _renderer->render(_physicEngine->getShapes());
+            _renderer->renderCollisions(_physicEngine->getCollidingShapes());
             _gui->render(_physicEngine->getShapes());
 
             DrawText(TextFormat("Mouse (%i,%i)", GetMouseX(), GetMouseY()), GetScreenWidth() - 115, 30, 15, DARKBLUE);

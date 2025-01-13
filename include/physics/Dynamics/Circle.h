@@ -29,6 +29,7 @@ namespace qlexengine
         void draw() const
         {
             DrawCircle(center.x, center.y, radius, color);
+            DrawCircle(center.x, center.y, 2, BLACK);
         }
 
         maths::Vec2<float> getPosition() const
@@ -39,6 +40,11 @@ namespace qlexengine
         bool isPointInShape(const maths::Vec2<float> &point) const
         {
             return maths::distance(point, center) < radius;
+        }
+
+        bool doCircleOverlap(const Circle &c) const
+        {
+            return distance(center, c.center) <= radius + c.radius;
         }
 
     private:

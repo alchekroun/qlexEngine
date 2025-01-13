@@ -18,10 +18,12 @@ namespace qlexengine
         maths::Vec2<float> force;
         float mass;
         Color color;
+        int id;
+        bool hasColision = false;
 
-        Shape2D(const maths::Vec2<float> &center_, Color color_) : center(center_), velocity(maths::Vec2<float>(0, 0)), force(maths::Vec2<float>(0, 0)), mass(0), color(color_) {}
-        Shape2D(const maths::Vec2<float> &center_, const float &mass_, Color color_) : center(center_), velocity(maths::Vec2<float>(0, 0)), force(maths::Vec2<float>(0, 0)), mass(mass_), color(color_) {}
-        Shape2D(const maths::Vec2<float> &center_, const maths::Vec2<float> &velocity_, const float &mass_, Color color_) : center(center_), velocity(velocity_), force(maths::Vec2<float>(0, 0)), mass(mass_), color(color_) {}
+        Shape2D(const maths::Vec2<float> &center_, Color color_) : Shape2D(center_, maths::Vec2<float>(0, 0), maths::Vec2<float>(0, 0), 0, color_) {}
+        Shape2D(const maths::Vec2<float> &center_, const float &mass_, Color color_) : Shape2D(center_, maths::Vec2<float>(0, 0), maths::Vec2<float>(0, 0), mass_, color_) {}
+        Shape2D(const maths::Vec2<float> &center_, const maths::Vec2<float> &velocity_, const float &mass_, Color color_) : Shape2D(center_, velocity_, maths::Vec2<float>(0, 0), mass_, color_) {}
         Shape2D(const maths::Vec2<float> &center_, const maths::Vec2<float> &velocity_, const maths::Vec2<float> &force_, const float &mass_, Color color_) : center(center_), velocity(velocity_), force(force_), mass(mass_), color(color_) {}
 
         virtual ~Shape2D() = default;

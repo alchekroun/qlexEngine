@@ -1,10 +1,7 @@
 #include <iostream>
 
 #include "logger/logger.h"
-#include "physics/Dynamics/Square.h"
-#include "physics/Dynamics/Circle.h"
 #include "engine/Application.h"
-#include "render/Renderer.h"
 
 #include <raylib.h>
 
