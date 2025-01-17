@@ -13,38 +13,22 @@ namespace qlexengine
     {
         float radius;
 
-        Circle(const maths::Vec2<float> &center_, const float &radius_, Color color_) : radius(radius_), Shape2D(center_, color_) {};
-        Circle(const maths::Vec2<float> &center_, const float &radius_, const float &mass_, Color color_) : radius(radius_), Shape2D(center_, mass_, color_) {};
-        Circle(const maths::Vec2<float> &center_, const float &radius_, const maths::Vec2<float> &velocity_, const float &mass_, Color color_) : radius(radius_), Shape2D(center_, velocity_, mass_, color_) {};
-        Circle(const maths::Vec2<float> &center_, const float &radius_, const maths::Vec2<float> &velocity_, const maths::Vec2<float> &force_, const float &mass_, Color color_) : radius(radius_), Shape2D(center_, velocity_, force_, mass_, color_) {};
-
-        void update(const float &dt)
+        Circle(const float &radius_) : Circle(radius_, 0.0) {}
+        Circle(const float &radius_, const float &mass_) : radius(radius_)
         {
-            force = maths::Vec2<float>(0, 9.81f) * mass;
-            velocity += force / mass * dt;
-            center += velocity + dt;
-            force = maths::Vec2<float>(0, 0); // reset net force at the end;
+            mass = mass_;
+            momentOfInertia = M_PI * std::pow(radius, 4) / 4;
         }
 
-        void draw() const
+        void draw(const maths::Vec2<float> &center_, const Color &color_, const float &rotation_ = 0.0) const
         {
-            DrawCircle(center.x, center.y, radius, color);
-            DrawCircle(center.x, center.y, 2, BLACK);
+            DrawCircle(center_.x, center_.y, radius, color_);
+            DrawCircle(center_.x, center_.y, 2, BLACK);
         }
 
-        maths::Vec2<float> getPosition() const
+        bool isPointInShape(const maths::Vec2<float> &center_, const maths::Vec2<float> &point_) const
         {
-            return center;
-        }
-
-        bool isPointInShape(const maths::Vec2<float> &point) const
-        {
-            return maths::distance(point, center) < radius;
-        }
-
-        bool doCircleOverlap(const Circle &c) const
-        {
-            return distance(center, c.center) <= radius + c.radius;
+            return maths::distance(point_, center_) < radius;
         }
 
     private:
@@ -53,7 +37,7 @@ namespace qlexengine
 
     inline std::ostream &operator<<(std::ostream &outs, const Circle &c)
     {
-        return outs << c.center << " r=" << c.radius;
+        return outs << " r=" << c.radius;
     }
 
 } // qlexengine

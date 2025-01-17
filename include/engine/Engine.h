@@ -2,16 +2,18 @@
 
 #include <memory>
 #include <vector>
+#include <utility>
 
 #include "logger/logger.h"
-#include "physics/Dynamics/Shape2D.h"
+#include "physics/dynamics/RigidBody.h"
 
 namespace qlexengine
 {
     class Engine
     {
     private:
-        std::vector<std::shared_ptr<Shape2D>> _shapes;
+        std::vector<std::shared_ptr<RigidBody>> _rigidBodies;
+        std::vector<std::pair<std::shared_ptr<RigidBody>, std::shared_ptr<RigidBody>>> _collidingRigidBodies;
 
     public:
         void initialize() {}
@@ -19,11 +21,16 @@ namespace qlexengine
         void stop() {}
         bool update(const float &dt);
 
-        void addShape2D(const std::shared_ptr<Shape2D> shape_) { _shapes.push_back(shape_); }
-        bool removeShape2D(const std::shared_ptr<Shape2D> shape_);
-        std::vector<std::shared_ptr<Shape2D>> getShapes() const { return _shapes; }
+        void addRigidBody(const std::shared_ptr<RigidBody> shape_) { _rigidBodies.push_back(shape_); }
+        bool removeRigidBody(const std::shared_ptr<RigidBody> shape_);
+        std::vector<std::shared_ptr<RigidBody>> getRigidBodies() const { return _rigidBodies; }
+        std::vector<std::pair<std::shared_ptr<RigidBody>, std::shared_ptr<RigidBody>>> getCollidingRigidBodies() const { return _collidingRigidBodies; }
 
         maths::Vec2<float> gravity2D{0, -9.81f};
+
+        void detectCollisions();
+
+        void solveCollisions();
 
     private:
         std::unique_ptr<logger> _log = std::make_unique<logger>("Engine");

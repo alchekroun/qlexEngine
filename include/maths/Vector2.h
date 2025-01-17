@@ -15,6 +15,11 @@ namespace qlexengine
 
             Vec2(T x_, T y_) : x(x_), y(y_) {}
 
+            inline static Vec2 getZeroVec()
+            {
+                return Vec2(0, 0);
+            }
+
             float getMagnitude() const
             {
                 return std::sqrt(std::pow(x, 2) + std::pow(y, 2));
@@ -134,7 +139,7 @@ namespace qlexengine
             }
         };
 
-        inline float dotProduct(const Vec2<float> v1, const Vec2<float> v2)
+        inline float dotProduct(const Vec2<float> &v1, const Vec2<float> &v2)
         {
             return v1.x * v2.x + v1.y * v1.y;
         }

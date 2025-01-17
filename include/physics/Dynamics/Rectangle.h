@@ -9,36 +9,52 @@ namespace qlexengine
     {
         float width;
         float height;
-        // TODO : Rework square as rectangle
-        Rectangle(const maths::Vec2<float> &center_, const float &width_, const float &height_, Color color_) : width(width_), height(height_), Shape2D(center_, color_) {};
-        Rectangle(const maths::Vec2<float> &center_, const float &width_, const float &height_, const float &mass_, Color color_) : width(width_), height(height_), Shape2D(center_, mass_, color_) {};
-        Rectangle(const maths::Vec2<float> &center_, const float &width_, const float &height_, const maths::Vec2<float> &velocity_, const float &mass_, Color color_) : width(width_), height(height_), Shape2D(center_, velocity_, mass_, color_) {};
-        Rectangle(const maths::Vec2<float> &center_, const float &width_, const float &height_, const maths::Vec2<float> &velocity_, const maths::Vec2<float> &force_, const float &mass_, Color color_) : width(width_), height(height_), Shape2D(center_, velocity_, force_, mass_, color_) {};
 
-        void update(const float &dt)
+        Rectangle(const float &width_, const float &height_) : Rectangle(width_, height_, 0.0) {}
+        Rectangle(const float &width_, const float &height_, const float &mass_) : width(width_), height(height_)
         {
-            force = maths::Vec2<float>(0, 9.81f) * mass;
-            velocity += force / mass * dt;
-            center += velocity + dt;
-            force = maths::Vec2<float>(0, 0); // reset net force at the end;
+            mass = mass_;
+            momentOfInertia = mass_ * (width_ * width_ + height_ * height_) / 12;
         }
 
-        void draw() const
+        maths::Vec2<float> getTopLeftCorner(const maths::Vec2<float> &center_) const
         {
-            DrawCircle(center.x, center.y, 2, BLACK);
+            return maths::Vec2<float>{center_.x - width / 2, center_.y - height / 2};
+        }
+
+        maths::Vec2<float> getTopRightCorner(const maths::Vec2<float> &center_) const
+        {
+            return maths::Vec2<float>{center_.x + width / 2, center_.y - height / 2};
+        }
+
+        maths::Vec2<float> getBottomRightCorner(const maths::Vec2<float> &center_) const
+        {
+            return maths::Vec2<float>{center_.x + width / 2, center_.y + height / 2};
+        }
+
+        void draw(const maths::Vec2<float> &center_, const Color &color_, const float &rotation_) const
+        {
             // DrawRectangle's center X & Y are NOT the center, where rectangle's diagonals cross,
             // but the top left corner.
-            DrawRectangle(center.x, center.y, width, height, color);
+            auto topLeftCorner = getTopLeftCorner(center_);
+            DrawRectangle(topLeftCorner.x, topLeftCorner.y, width, height, color_);
+            DrawCircle(center_.x, center_.y, 2, BLACK);
         }
 
-        maths::Vec2<float> getPosition() const
+        bool isPointInShape(const maths::Vec2<float> &center_, const maths::Vec2<float> &point_) const
         {
-            return center;
-        }
+            auto A = getTopLeftCorner(center_);
+            auto B = getTopRightCorner(center_);
+            auto C = getBottomRightCorner(center_);
+            auto AB = A - B;
+            auto AC = A - C;
+            auto AP = A - point_;
+            auto BC = B - C;
+            auto BP = B - point_;
 
-        bool isPointInShape(const maths::Vec2<float> &point) const
-        {
-            return false;
+            return (
+                (0 <= maths::dotProduct(AB, AP) <= maths::dotProduct(AB, AB)) &&
+                (0 <= maths::dotProduct(BC, BP) <= maths::dotProduct(BC, BC)));
         }
 
     private:
@@ -47,7 +63,7 @@ namespace qlexengine
 
     inline std::ostream &operator<<(std::ostream &outs, const Rectangle &s)
     {
-        return outs << s.center << " w=" << s.width << " h=" << s.height;
+        return outs << "w=" << s.width << " h=" << s.height;
     }
 
 } // qlexengine

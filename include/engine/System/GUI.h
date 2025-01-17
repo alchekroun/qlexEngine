@@ -21,7 +21,7 @@ namespace qlexengine
             rlImGuiShutdown();
         }
 
-        void render(const std::vector<std::shared_ptr<Shape2D>> &shapes_)
+        void render(const std::vector<std::shared_ptr<RigidBody>> &RigidBodies)
         {
             rlImGuiBegin();
             {
@@ -33,17 +33,17 @@ namespace qlexengine
                     ImGui::TableSetupColumn("position (x,y)", ImGuiTableColumnFlags_WidthStretch);
                     ImGui::TableSetupColumn("velocity (x,y)", ImGuiTableColumnFlags_WidthStretch);
                     ImGui::TableHeadersRow();
-                    for (int row = 0; row < shapes_.size(); row++)
+                    for (int row = 0; row < RigidBodies.size(); row++)
                     {
                         ImGui::TableNextColumn();
                         ImGui::Text("%d", row);
                         ImGui::TableNextColumn();
                         std::stringstream force_helper;
-                        force_helper << shapes_.at(row)->getPosition();
+                        force_helper << RigidBodies.at(row)->position;
                         ImGui::Text("%s", force_helper.str().c_str());
                         ImGui::TableNextColumn();
                         std::stringstream velocity_helper;
-                        velocity_helper << shapes_.at(row)->velocity;
+                        velocity_helper << RigidBodies.at(row)->linearVelocity;
                         ImGui::Text("%s", velocity_helper.str().c_str());
                     }
                     ImGui::EndTable();
